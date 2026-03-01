@@ -20,7 +20,7 @@ def greeting(self):
     # TODO: Write a short greeting message                                 #
     ########################################################################
 
-    greeting_message = "olá meu povo lindo"
+    greeting_message = "olá meu povo"
 
     ########################################################################
     #                             END OF YOUR CODE                         #
