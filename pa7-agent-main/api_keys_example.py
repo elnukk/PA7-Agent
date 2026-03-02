@@ -1,8 +1,0 @@
-import os
-
-TOGETHER_API_KEY = ""
-os.environ["TOGETHER_API_KEY"] = TOGETHER_API_KEY
-
-
-SERPAPI_API_KEY = ""
-os.environ["SERPAPI_API_KEY"] = SERPAPI_API_KEY
