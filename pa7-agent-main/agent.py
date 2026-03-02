@@ -120,7 +120,14 @@ def similarity(u, v):
     ########################################################################
     # TODO: Compute cosine similarity between the two vectors.             #
     ########################################################################
-    similarity = 0
+    dot_p = np.dot(u,v)
+    norm_vecu = np.linalg.norm(u)
+    norm_vecv = np.linalg.norm(v)
+
+    if(norm_vecu == 0 or norm_vecv == 0):
+        return 0
+    
+    similarity = dot_p / (norm_vecu * norm_vecv)
     ########################################################################
     #                          END OF YOUR CODE                            #
     ########################################################################
