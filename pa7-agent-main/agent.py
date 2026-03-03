@@ -161,6 +161,19 @@ def recommend_movies(user_name: str, k=3):
     # Populate this list with k movie indices to recommend to the user.
     recommendations = []
     
+    movies_rxi = []
+    for m_idx in range(len(ratings_matrix)):
+        curr_movie = ratings_matrix[m_idx]
+        rxi=0
+        for j in range(len(user_ratings)):
+            rxi+= similarity(curr_movie, ratings_matrix[j])*user_ratings[j]
+        if(user_ratings[m_idx]==0):
+            movies_rxi.append([m_idx, rxi])
+    sorted_movies = sorted(movies_rxi, key=lambda x: x[1], reverse=True)
+    for i in range(0,k):
+        if i==len(sorted_movies):
+            break
+        recommendations.append(sorted_movies[i][0])
     ########################################################################
     #                          END OF YOUR CODE                            #
     ########################################################################
