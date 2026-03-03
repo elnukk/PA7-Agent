@@ -162,10 +162,11 @@ def recommend_movies(user_name: str, k=3):
     recommendations = []
     
     movies_rxi = []
+    rated_movie_indices = [i for i, r in enumerate(user_ratings) if r != 0]
     for m_idx in range(len(ratings_matrix)):
         curr_movie = ratings_matrix[m_idx]
         rxi=0
-        for j in range(len(user_ratings)):
+        for j in rated_movie_indices:
             rxi+= similarity(curr_movie, ratings_matrix[j])*user_ratings[j]
         if(user_ratings[m_idx]==0):
             movies_rxi.append([m_idx, rxi])
@@ -281,7 +282,7 @@ class MovieTicketAgent(dspy.Signature):
     ########################################################################
     """
     You are a movie ticket agent that helps user book and manage movie tickets. You are given a list of tools to handle user request, and you should decide the right tool to use in order to
-    fulfill users' request. Produce the answer fast, quickly.
+    fulfill users' request. 
     Objective:
     - Identify user's request and identify key information (user name, movie title, number of movies)
     - For example, is the prompt is "My name is Peter, recommend 3 movies to me." use the 'recommend_movies' tool
