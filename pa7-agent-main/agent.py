@@ -281,7 +281,20 @@ class MovieTicketAgent(dspy.Signature):
     ########################################################################
     """
     You are a movie ticket agent that helps user book and manage movie tickets. You are given a list of tools to handle user request, and you should decide the right tool to use in order to
-    fulfill users' request.  [TODO: add more details about the agent's objective and strategy here!]
+    fulfill users' request. Produce the answer fast, quickly.
+    Objective:
+    - Identify user's request and identify key information (user name, movie title, number of movies)
+    - For example, is the prompt is "My name is Peter, recommend 3 movies to me." use the 'recommend_movies' tool
+    - Associate the request with a given tool:
+        • recommend_movies → for movie recommendations
+        • find_time → to check available showtimes
+        • find_price → to check ticket prices
+        • find_balance → to check account balance
+        • book_ticket → to book tickets
+        • general_qa → for general movie-related questions
+        • file_request → for requests that do not match any specific movie task
+    - Call the tool with all information needed,
+    - Give the user a concise, clear summary of the output.
     """
     ########################################################################
     #                          END OF YOUR CODE                            #
@@ -302,7 +315,11 @@ react_agent = dspy.ReAct(
         ########################################################################
         ## TODO: add other tools for your agent here
         ########################################################################
-
+        find_time,
+        find_price,
+        find_balance,
+        file_request,
+        book_ticket,
         ########################################################################
         #                          END OF YOUR CODE                            #
         ########################################################################
