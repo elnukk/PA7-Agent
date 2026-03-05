@@ -20,7 +20,7 @@ def greeting(self):
     # TODO: Write a short greeting message                                 #
     ########################################################################
 
-    greeting_message = "olá meu povo lindo"
+    greeting_message = "Hi! How can I help"
 
     ########################################################################
     #                             END OF YOUR CODE                         #
@@ -248,17 +248,39 @@ def book_ticket(user_name: str, movie_title: str):
     """
    
     ########################################################################
-    # TODO: Implement the `book_ticket` tool                                
-    # * Only make a booking if the user has enough balance. Then, update the 
-    #   user's balance in `ticket_database`.
-    #  If there is not enough balance, return: "Insufficient balance to book the ticket for {movie_title}."
-    # * Use `_generate_id` to create a 6-digit ticket number for the booking
-    # * For any requests that can't be handled by your agent, make a human 
-    #   customer support request by calling the `file_request` tool 
-    #   to add the request to the `request_database`
+    # Implement the `book_ticket` tool                                     #
     ########################################################################
-    ticket_number = '0'
-    user_balance = None
+    
+    # Look up the user
+    user_key = user_name.lower()
+    if user_key not in user_database:
+        return f"Error: User {user_name} not found."
+    user_profile = user_database[user_key]
+
+    # Retrieve movie details
+    if movie_title not in showtime_database:
+        return f"Error: Movie {movie_title} not found."
+    movie = showtime_database[movie_title]
+
+    # Check if user enough money
+    if user_profile.balance < movie.price:
+        return f"Insufficient balance to book the ticket for {movie_title}."
+    
+    # Deduct price from balance
+    user_profile.balance -= movie.price
+    user_balance = user_profile.balance
+    
+    # Generate ticket
+    ticket_number = _generate_id(length=6)
+
+    # Create Ticket obj
+    new_ticket = Ticket(
+        user_name=user_profile.name,
+        movie_title=movie.title,
+        time=movie.start_time
+    )
+    ticket_database[ticket_number] = new_ticket
+
     ########################################################################
     #                          END OF YOUR CODE                            #
     ########################################################################
@@ -281,21 +303,21 @@ class MovieTicketAgent(dspy.Signature):
     # in order to successfully complete the tasks
     ########################################################################
     """
-    You are a movie ticket agent that helps user book and manage movie tickets. You are given a list of tools to handle user request, and you should decide the right tool to use in order to
-    fulfill users' request. 
+    You are a movie ticket agent that helps user book and manage movie tickets. You are given a list of toolsYour job is to select the correct tool to fulfill the user's request. 
     Objective:
-    - Identify user's request and identify key information (user name, movie title, number of movies)
-    - For example, is the prompt is "My name is Peter, recommend 3 movies to me." use the 'recommend_movies' tool
-    - Associate the request with a given tool:
-        • recommend_movies → for movie recommendations
-        • find_time → to check available showtimes
-        • find_price → to check ticket prices
-        • find_balance → to check account balance
-        • book_ticket → to book tickets
-        • general_qa → for general movie-related questions
-        • file_request → for requests that do not match any specific movie task
-    - Call the tool with all information needed,
-    - Give the user a concise, clear summary of the output.
+    - Identify the user's core request and extract key parameters (e.g., user name, movie title, number of movies).
+    - Map the request to the appropiate tool:
+        • recommend_movies: Use for movie recommendations.
+        • find_time: Use to check available showtimes.
+        • find_price: Use to check ticket prices.
+        • find_balance: Use to check account balance.
+        • book_ticket: Use to book tickets.
+        • general_qa: Use ONLY for general plot summaries or movie trivia requested by the user. DO NOT use this to talk to yourself or or ask for missing information.
+        • file_request: Use for ANY request you cannot directly perform, such as applying discounts, modifying/canceling tickets, or handling complaints. If the user name is not provided, use an empty string "".
+    - ONLY answer the user's immediate request. DO NOT ask follow-up questions or hold a conversation with yourself.
+    - NEVER hallucinate tool arguments. Only pass arguments explicitly supported by the tool (e.g., recommend_movies only takes user_name and k).
+    - MISSING INFORMATION: If critical information is missing (like the user's name for booking a ticket), DO NOT use general_qa to find it, and DO NOT make up a name. Immediately stop, use the 'finish' tool, and ask the user for the missing information in your process_result.
+    - Stop and output the process_result immediately after successfully using the required tool.
     """
     ########################################################################
     #                          END OF YOUR CODE                            #
