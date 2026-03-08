@@ -1,0 +1,16 @@
+2026-03-08T03:15:49.376Z INFO Is remote: false
+2026-03-08T03:15:49.376Z INFO Starting Local. Installation path: /Users/spurtinimbali/Desktop/Adobe Express AddOn Hackathon
+2026-03-08T03:15:49.376Z INFO [MainProvider] Creating new MainProvider instance...
+2026-03-08T03:15:49.376Z INFO [TabsManager] Code view listener set up at initialization
+2026-03-08T03:15:49.376Z INFO Installation path exists: /Users/spurtinimbali/Desktop/Adobe Express AddOn Hackathon
+2026-03-08T03:15:49.376Z INFO Initializing database with URL: file:/Users/spurtinimbali/Desktop/Adobe Express AddOn Hackathon/pythagora-core/data/database/pythagora.db
+2026-03-08T03:15:49.377Z INFO Database file exists, skipping prisma generate/push for faster startup
+2026-03-08T03:15:49.377Z INFO Database initialized successfully
+2026-03-08T03:15:49.377Z INFO [Migration] Checking for database migration...
+2026-03-08T03:15:49.483Z INFO [Migration] No migration needed
+2026-03-08T03:16:02.781Z INFO [TabsManager] First file opened, triggering split view
+2026-03-08T03:16:02.782Z INFO [MainProvider] First file opened, creating split view
+2026-03-08T03:17:59.233Z INFO [TabsManager] First file opened, triggering split view
+2026-03-08T03:17:59.233Z INFO [MainProvider] First file opened, creating split view
+2026-03-08T03:18:00.288Z INFO [TabsManager] First file opened, triggering split view
+2026-03-08T03:18:00.288Z INFO [MainProvider] First file opened, creating split view

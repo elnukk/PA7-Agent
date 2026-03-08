@@ -318,6 +318,9 @@ class MovieTicketAgent(dspy.Signature):
     - NEVER hallucinate tool arguments. Only pass arguments explicitly supported by the tool (e.g., recommend_movies only takes user_name and k).
     - MISSING INFORMATION: If critical information is missing (like the user's name for booking a ticket), DO NOT use general_qa to find it, and DO NOT make up a name. Immediately stop, use the 'finish' tool, and ask the user for the missing information in your process_result.
     - Stop and output the process_result immediately after successfully using the required tool.
+    - When web search results are available, always prioritize using them to answer the user's request instead of calling general_qa, even if the search results are not perfect. 
+    - Do NOT call general_qa to verify or contradict web search results. Only use general_qa for general questions about movies, and never use it to find missing information or to talk to yourself.
+    - After a successful web_search, summarize the results directly in process_result.
     """
     ########################################################################
     #                          END OF YOUR CODE                            #
@@ -411,7 +414,7 @@ class WebTools:
         # Parameters passed to the SerpAPI search endpoint.
         # We use Bing here, but SerpAPI supports multiple search engines.
         params = {
-            "engine": "bing",
+            "engine": "google",
             "q": query,
             "api_key": self.serpapi_key,
             "count": num_results,
@@ -435,7 +438,7 @@ class WebTools:
             return "\n".join(lines)
 
         except Exception as e:
-            return f"Error during web_search: {str(e)}"
+            return f"Error du ring web_search: {str(e)}"
 
 
 
@@ -642,7 +645,15 @@ class EnhancedMovieTicketAgent(dspy.Module):
         # if they are enabled
         ########################################################################
         # TODO: Add tools for the base agent
-        self.tools = []
+        self.tools = [
+            recommend_movies,
+            general_qa,
+            find_time,
+            find_price,
+            find_balance,
+            file_request,
+            book_ticket,
+        ]
 
         # enable web search
         if self.web_tools: 
@@ -652,6 +663,7 @@ class EnhancedMovieTicketAgent(dspy.Module):
         # add memory tools if enabled
         if self.memory_tools:
             # TODO: add the relevant memory tools here and delete `pass`
+            self.tools.append(self.web_tools.web_search)
             pass
        
         ########################################################################
