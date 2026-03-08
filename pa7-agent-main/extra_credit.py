@@ -140,19 +140,7 @@ class YourAgent(dspy.Module):
 
     def __init__(self):
         super().__init__()
-        self.web_tools = WebTools()
-
-        self.tools = [
-            detect_mood,
-            self.web_tools.web_search,
-        ]
-        self.agent = dspy.ReAct(
-            signature=YourAgentSignature,
-            tools=self.tools,
-            max_iters=8,
-        )
-
-        # TODO: Initialize any components your agent needs
+                # TODO: Initialize any components your agent needs
         # Examples:
         # - Tools for ReAct
         # - Memory systems
@@ -172,6 +160,18 @@ class YourAgent(dspy.Module):
         #     tools=self.tools,
         #     max_iters=6
         # )
+        self.web_tools = WebTools()
+
+        self.tools = [
+            detect_mood,
+            self.web_tools.web_search,
+        ]
+        self.agent = dspy.ReAct(
+            signature=YourAgentSignature,
+            tools=self.tools,
+            max_iters=8,
+        )
+
 
     def forward(self, user_input: str):
         """Process user input and generate a response."""
@@ -180,7 +180,7 @@ class YourAgent(dspy.Module):
         return self.agent(user_input=user_input)
 
 
-# UI Helpers so it looks PRETTY
+# UI Helpers to make it look pretty
 def build_sidebar() -> Panel:
     """Build the right-side panel showing mood."""
     content = Table.grid(padding=(0, 1))
@@ -276,7 +276,6 @@ def run_demo():
     ))
 
 
-
     # TODO: Create test cases that demonstrate your agent's capabilities
     # Show what makes your agent interesting and useful!
     
@@ -296,7 +295,6 @@ def run_demo():
         prediction = agent(user_input=user_input)
         print_turn(prediction)
         console.print("─" * console.width)
-    
     
 if __name__ == "__main__":
     run_demo()
