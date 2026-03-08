@@ -455,13 +455,13 @@ memory_config = {
     "embedder": {
         "provider": "together",
         "config": {
-            "model": "Alibaba-NLP/gte-modernbert-base"
+            "model": "intfloat/multilingual-e5-large-instruct"
         }
     },
     "vector_store": {
         "provider": "qdrant",
         "config": {
-            "embedding_model_dims": 768
+            "embedding_model_dims": 1024
         }
     }
 }
@@ -494,7 +494,7 @@ class MemoryTools:
             # Hint: It may be helpful to review mem0's memory operations here:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
-            pass
+            self.memory.add(content, user_id=user_id)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -535,7 +535,7 @@ class MemoryTools:
             # Hint: it would be helpful to read the documentation of 
             # mem0 to see how to use the `search` method: https://github.com/mem0ai/mem0
             ########################################################################
-            results = None
+            results = self.memory.search(query, user_id=user_id, limit=limit)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -566,7 +566,7 @@ class MemoryTools:
             # Hint: It may be helpful to review mem0's memory operations here:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
-            pass
+            self.memory.update(memory_id, new_content)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -582,7 +582,7 @@ class MemoryTools:
             # Hint: It may be helpful to review mem0's memory operations here:
             # https://docs.mem0.ai/core-concepts/memory-operations
             ########################################################################
-            pass
+            self.memory.delete(memory_id)
             ########################################################################
             #                          END OF YOUR CODE                            #
             ########################################################################
@@ -658,13 +658,16 @@ class EnhancedMovieTicketAgent(dspy.Module):
         # enable web search
         if self.web_tools: 
             # TODO: add web search tool to self.tools and delete `pass`
-            pass
+            self.tools.append(self.web_tools.web_search)
         
         # add memory tools if enabled
         if self.memory_tools:
             # TODO: add the relevant memory tools here and delete `pass`
-            self.tools.append(self.web_tools.web_search)
-            pass
+            self.tools.append(self.memory_tools.store_memory)
+            self.tools.append(self.memory_tools.search_memories)
+            self.tools.append(self.memory_tools.get_all_memories)
+            self.tools.append(self.memory_tools.update_memory)
+            self.tools.append(self.memory_tools.delete_memory)
        
         ########################################################################
         #                          END OF YOUR CODE                            #
