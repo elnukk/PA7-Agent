@@ -13,6 +13,7 @@ from bs4 import BeautifulSoup
 from mem0 import Memory
 from datetime import datetime
 import time
+import requests
 
 def greeting(self):
     """Return a message that the chatbot uses to greet the user."""
@@ -432,8 +433,12 @@ class WebTools:
                 title = item.get("title") or "(no title)"
                 link = item.get("link") or "(no link)"
                 snippet = item.get("snippet") or ""
+
+                content = requests.get(link).text
+                extracted_content =extract_text(content)
+
                 # Each result is formatted as a numbered block
-                lines.append(f"{i}. {title}\n   {link}\n   {snippet}".strip())
+                lines.append(f"{i}. {title}\n   {link}\n   {snippet}\n   Extracted content:\n {extracted_content[:500]}...".strip())
 
             return "\n".join(lines)
 
