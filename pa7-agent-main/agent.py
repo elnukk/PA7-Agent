@@ -276,7 +276,7 @@ def book_ticket(user_name: str, movie_title: str):
 
     # Create Ticket obj
     new_ticket = Ticket(
-        user_name=user_profile.name,
+        user_name=user_name,
         movie_title=movie_title,
         time=movie.start_time
     )
